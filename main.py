@@ -47,7 +47,28 @@ def grid_converter(grid_number):
     else:
         grid_y = 420
 
-    return (grid_x, grid_y)
+    return grid_x, grid_y
+
+
+def position_to_grid(position):
+    pos_x = position[0]
+    pos_y = position[1]
+
+    if 0 <= pos_x <= 160:
+        pos_x = 0
+    elif 160 < pos_x <= 340:
+        pos_x = 1
+    else:
+        pos_x = 2
+
+    if 0 <= pos_y <= 160:
+        pos_y = 0
+    elif 160 < pos_y <= 340:
+        pos_y = 1
+    else:
+        pos_y = 2
+
+    return pos_x + pos_y * 3
 
 
 def draw_x(grid_number):
@@ -88,10 +109,16 @@ def draw_board():
 running = True
 
 while running:
-    # Iesire din aplicatie cand se apasa X
     for event in pygame.event.get():
+        # Iesire din aplicatie cand se apasa X
         if event.type == pygame.QUIT:
             running = False
+
+        # Verificare click pe ecran
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            position = pygame.mouse.get_pos()
+            clicked_square = position_to_grid(position)
+            print(clicked_square)
 
     screen.fill(midnight_blue)
 
