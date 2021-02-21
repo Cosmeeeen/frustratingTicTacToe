@@ -158,7 +158,6 @@ def get_board_state():
         p1 *= board[i]
         p2 *= board[i+3]
         p3 *= board[i+6]
-    print(p1, p2, p3)
 
     if p1 == 1 or p2 == 1 or p3 == 1:
         return 'X'
@@ -206,7 +205,6 @@ while running:
                 position = pygame.mouse.get_pos()
                 clicked_square = position_to_grid(position)
                 player_turn(clicked_square)
-                print(get_board_state())
                 if get_board_state():
                     playing = False
             else:
