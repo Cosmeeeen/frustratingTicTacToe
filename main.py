@@ -8,8 +8,14 @@ cloud = (236, 240, 241)
 # Initializare + setari ecran
 pygame.init()
 
-screen = pygame.display.set_mode((500, 500))
+SCREEN_WIDTH = 500
+SCREEN_HEIGHT = 500
+
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("X si 0 doar ca nu ai cum sa castigi")
+pygame.font.init()
+big_font = pygame.font.SysFont("Lucida Sans Unicode", 82)
+small_font = pygame.font.SysFont("Lucida Sans Unicode", 32)
 
 clock = pygame.time.Clock()
 
@@ -105,8 +111,41 @@ def draw_board():
             draw_0(i)
 
 
+# Actionam dupa inputul jucatorului, care jocaca intotdeuna cu 0 (2)
+def player_turn(square):
+    if board[square] == 0:
+        board[square] = 2
+
+
 # Main game loop
 running = True
+playing = False
+
+
+# Arata pe ecran ecranul cand jocul s-a terminat
+def draw_game_over():
+    game_over_text = big_font.render('Game Over', True, carrot)
+    text_width = game_over_text.get_rect().width
+    text_height = game_over_text.get_rect().height
+    screen.blit(
+        game_over_text,
+        (
+            SCREEN_WIDTH // 2 - text_width // 2,
+            SCREEN_HEIGHT // 2 - text_height // 2 - 50
+        )
+    )
+
+    try_again_text = small_font.render('Click anywhere to try again', True, cloud)
+    text_width = game_over_text.get_rect().width
+    text_height = game_over_text.get_rect().height
+    screen.blit(
+        try_again_text,
+        (
+            SCREEN_WIDTH // 2 - text_width // 2,
+            SCREEN_HEIGHT // 2 - text_height // 2 + 50
+        )
+    )
+
 
 while running:
     for event in pygame.event.get():
@@ -116,13 +155,20 @@ while running:
 
         # Verificare click pe ecran
         if event.type == pygame.MOUSEBUTTONDOWN:
-            position = pygame.mouse.get_pos()
-            clicked_square = position_to_grid(position)
-            print(clicked_square)
+            if playing:
+                position = pygame.mouse.get_pos()
+                clicked_square = position_to_grid(position)
+                player_turn(clicked_square)
+            else:
+                playing = True
+                new_game()
 
     screen.fill(midnight_blue)
 
-    draw_board()
+    if playing:
+        draw_board()
+    else:
+        draw_game_over()
 
     pygame.display.flip()
 
