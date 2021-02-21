@@ -123,8 +123,12 @@ playing = True
 
 
 # Arata pe ecran ecranul cand jocul s-a terminat
-def draw_game_over():
-    game_over_text = big_font.render('Game Over', True, carrot)
+def draw_game_over(winner):
+    if winner == 'X' or winner == '0':
+        winner = winner + ' won'
+    else:
+        winner = 'Draw'
+    game_over_text = big_font.render(winner, True, carrot)
     text_width = game_over_text.get_rect().width
     text_height = game_over_text.get_rect().height
     screen.blit(
@@ -136,8 +140,8 @@ def draw_game_over():
     )
 
     try_again_text = small_font.render('Click anywhere to try again', True, cloud)
-    text_width = game_over_text.get_rect().width
-    text_height = game_over_text.get_rect().height
+    text_width = try_again_text.get_rect().width
+    text_height = try_again_text.get_rect().height
     screen.blit(
         try_again_text,
         (
@@ -190,7 +194,7 @@ def get_board_state():
         return '0'
 
     if p1 and p2 and p3:
-        return 'egalitate'  # egalitate
+        return 'draw'  # egalitate
 
 
 while running:
@@ -205,7 +209,8 @@ while running:
                 position = pygame.mouse.get_pos()
                 clicked_square = position_to_grid(position)
                 player_turn(clicked_square)
-                if get_board_state():
+                winner_check = get_board_state()
+                if winner_check:
                     playing = False
             else:
                 playing = True
@@ -216,7 +221,7 @@ while running:
     if playing:
         draw_board()
     else:
-        draw_game_over()
+        draw_game_over(winner_check)
 
     pygame.display.flip()
 
