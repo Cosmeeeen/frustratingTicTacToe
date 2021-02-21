@@ -119,7 +119,7 @@ def player_turn(square):
 
 # Main game loop
 running = True
-playing = False
+playing = True
 
 
 # Arata pe ecran ecranul cand jocul s-a terminat
@@ -147,6 +147,53 @@ def draw_game_over():
     )
 
 
+def get_board_state():
+    global board
+
+    # verificam liniile
+    p1 = 1
+    p2 = 1
+    p3 = 1
+    for i in range(3):
+        p1 *= board[i]
+        p2 *= board[i+3]
+        p3 *= board[i+6]
+    print(p1, p2, p3)
+
+    if p1 == 1 or p2 == 1 or p3 == 1:
+        return 'X'
+    if p1 == 8 or p2 == 8 or p3 == 8:
+        return '0'
+
+    # verificam coloanele
+    p1 = 1
+    p2 = 1
+    p3 = 1
+    for i in range(3):
+        p1 *= board[3*i]
+        p2 *= board[1 + 3*i]
+        p3 *= board[2 + 3*i]
+
+    if p1 == 1 or p2 == 1 or p3 == 1:
+        return 'X'
+    if p1 == 8 or p2 == 8 or p3 == 8:
+        return '0'
+
+    p1 = 1
+    p2 = 1
+    for i in range(3):
+        p1 *= board[4*i]
+        p2 *= board[i*2+2]
+
+    if p1 == 1 or p2 == 1:
+        return 'X'
+    if p1 == 8 or p2 == 8:
+        return '0'
+
+    if p1 and p2 and p3:
+        return 'egalitate'  # egalitate
+
+
 while running:
     for event in pygame.event.get():
         # Iesire din aplicatie cand se apasa X
@@ -159,6 +206,9 @@ while running:
                 position = pygame.mouse.get_pos()
                 clicked_square = position_to_grid(position)
                 player_turn(clicked_square)
+                print(get_board_state())
+                if get_board_state():
+                    playing = False
             else:
                 playing = True
                 new_game()
