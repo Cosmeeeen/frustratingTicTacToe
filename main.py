@@ -1,6 +1,6 @@
 import pygame
 
-from ai import best_move
+import ai
 
 # Culori
 midnight_blue = (44, 62, 80)
@@ -123,7 +123,7 @@ def player_turn(square):
 
 def ai_turn():
     global board
-    best = best_move(board)
+    best = ai.best_move(board, get_board_state)
     board[best] = 1
     global players_turn
     players_turn = True
@@ -158,9 +158,7 @@ def draw_game_over(winner):
     )
 
 
-def get_board_state():
-    global board
-
+def get_board_state(board):
     # verificam liniile
     p1 = 1
     p2 = 1
@@ -222,7 +220,7 @@ while running:
                 position = pygame.mouse.get_pos()
                 clicked_square = position_to_grid(position)
                 player_turn(clicked_square)
-                winner_check = get_board_state()
+                winner_check = get_board_state(board)
                 players_turn = False
                 if winner_check:
                     playing = False
@@ -235,7 +233,7 @@ while running:
     if playing:
         if players_turn is False:
             ai_turn()
-            winner_check = get_board_state()
+            winner_check = get_board_state(board)
             if winner_check:
                 playing = False
         draw_board()
