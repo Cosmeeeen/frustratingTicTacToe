@@ -1,5 +1,7 @@
 import pygame
 
+from ai import best_move
+
 # Culori
 midnight_blue = (44, 62, 80)
 carrot = (230, 126, 34)
@@ -20,14 +22,16 @@ small_font = pygame.font.SysFont("Lucida Sans Unicode", 32)
 clock = pygame.time.Clock()
 
 board = [
-    0, 2, 0,
-    0, 1, 0,
+    0, 0, 0,
+    0, 0, 0,
     0, 0, 0
 ]
 
 
 def new_game():
     global board
+    global players_turn
+    players_turn = False
     board = [
         0, 0, 0,
         0, 0, 0,
@@ -117,9 +121,13 @@ def player_turn(square):
         board[square] = 2
 
 
-# Main game loop
-running = True
-playing = True
+def ai_turn():
+    global board
+    best = best_move(board)
+    print(best)
+    board[best] = 1
+    global players_turn
+    players_turn = True
 
 
 # Arata pe ecran ecranul cand jocul s-a terminat
@@ -197,6 +205,12 @@ def get_board_state():
         return 'draw'  # egalitate
 
 
+# Main game loop
+running = True
+playing = True
+players_turn = False
+
+
 while running:
     for event in pygame.event.get():
         # Iesire din aplicatie cand se apasa X
@@ -205,20 +219,26 @@ while running:
 
         # Verificare click pe ecran
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if playing:
+            if playing and players_turn:
                 position = pygame.mouse.get_pos()
                 clicked_square = position_to_grid(position)
                 player_turn(clicked_square)
                 winner_check = get_board_state()
+                players_turn = False
                 if winner_check:
                     playing = False
-            else:
+            elif not playing:
                 playing = True
                 new_game()
 
     screen.fill(midnight_blue)
 
     if playing:
+        if players_turn is False:
+            ai_turn()
+            winner_check = get_board_state()
+            if winner_check:
+                playing = False
         draw_board()
     else:
         draw_game_over(winner_check)
