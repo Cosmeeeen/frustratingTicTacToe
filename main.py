@@ -124,7 +124,6 @@ def player_turn(square):
 def ai_turn():
     global board
     best = best_move(board)
-    print(best)
     board[best] = 1
     global players_turn
     players_turn = True
