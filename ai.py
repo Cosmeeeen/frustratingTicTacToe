@@ -3,7 +3,9 @@ def best_move(board, state_calculator):
     best_score = -999
     for i in range(len(board)):
         if board[i] == 0:
-            temp_score = maximize(board, state_calculator)
+            board[i] = 1
+            temp_score = minimize(board, state_calculator)
+            board[i] = 0
             if temp_score > best_score:
                 best_score = temp_score
                 move = i

@@ -22,7 +22,7 @@ small_font = pygame.font.SysFont("Lucida Sans Unicode", 32)
 clock = pygame.time.Clock()
 
 board = [
-    0, 0, 0,
+    1, 0, 0,
     0, 0, 0,
     0, 0, 0
 ]
@@ -31,9 +31,9 @@ board = [
 def new_game():
     global board
     global players_turn
-    players_turn = False
+    players_turn = True
     board = [
-        0, 0, 0,
+        1, 0, 0,
         0, 0, 0,
         0, 0, 0
     ]
@@ -205,7 +205,7 @@ def get_board_state(board):
 # Main game loop
 running = True
 playing = True
-players_turn = False
+players_turn = True
 
 
 while running:
