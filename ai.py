@@ -15,9 +15,9 @@ def best_move(board, state_calculator):
 def maximize(board, state_calculator):
     tmp_state = state_calculator(board)
     if tmp_state == 'X':
-        return 1
+        return 10
     if tmp_state == '0':
-        return -1
+        return -10
     if tmp_state == 'draw':
         return 0
 
@@ -29,15 +29,15 @@ def maximize(board, state_calculator):
             score = max(temp_score, score)
             board[i] = 0
 
-    return score
+    return score - 1
 
 
 def minimize(board, state_calculator):
     tmp_state = state_calculator(board)
     if tmp_state == 'X':
-        return 1
+        return 10
     if tmp_state == '0':
-        return -1
+        return -10
     if tmp_state == 'draw':
         return 0
 
@@ -49,5 +49,5 @@ def minimize(board, state_calculator):
             score = min(temp_score, score)
             board[i] = 0
 
-    return score
+    return score - 1
 
